@@ -45,7 +45,7 @@
 
 ## 🛠️ Architecture & Daily Workflow
 
-- **Schedule**: Every day at **4:00 PM IST (16:00 IST / 10:30 UTC)** via GitHub Actions cron `30 10 * * *`.
+- **Schedule**: Every day at **10:00 AM IST (10:00 IST / 04:30 UTC)** via GitHub Actions cron `30 4 * * *`.
 - **Commits per Day**: **6 commits** every day covering Domain Logic, Controllers, Utilities, Unit Tests, Architecture Specs, and Milestone Manifests.
 - **Testing**: Pure Node.js test harness run automatically on every single commit.
 

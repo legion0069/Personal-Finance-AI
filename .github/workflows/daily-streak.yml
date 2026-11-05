@@ -1,4 +1,4 @@
-name: Personal Finance AI Daily Streak (4:00 PM IST)
+name: Personal Finance AI Daily Streak (10:00 AM IST)
 
 on:
   # Primary: Instant external triggers (cron-job.org / curl / REST API dispatches)
@@ -23,8 +23,8 @@ on:
 
   # Fallback: GitHub native scheduler
   schedule:
-    # 10:30 UTC = 16:00 IST (4:00 PM IST)
-    - cron: '30 10 * * *'
+    # 04:30 UTC = 10:00 IST (10:00 AM IST) fallback
+    - cron: '30 4 * * *'
 
 permissions:
   contents: write

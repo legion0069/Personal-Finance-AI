@@ -1,6 +1,6 @@
 /**
  * Personal-Finance-AI — Autonomous Daily Streak Runner (GitStreak Engine)
- * Runs daily at 4:00 PM IST (16:00 IST / 10:30 UTC)
+ * Runs daily at 10:00 AM IST (10:00 IST / 04:30 UTC)
  * Executes 6 semantic commits per day across features, controllers, utils, tests, specs, and docs.
  */
 
@@ -377,7 +377,7 @@ function generateResilientDayCode({ projectName, dayNumber, totalDays, milestone
 async function main() {
   console.log('========================================================');
   console.log('🤖 PERSONAL FINANCE AI — AUTONOMOUS DAILY STREAK RUNNER');
-  console.log(`⏰ Daily Schedule: 4:00 PM IST (16:00 IST / 10:30 UTC)`);
+  console.log(`⏰ Daily Schedule: 10:00 AM IST (10:00 IST / 04:30 UTC)`
   console.log('========================================================');
 
   const workingDir = process.cwd();
