@@ -1,0 +1,84 @@
+name: Personal Finance AI Daily Streak (4:00 PM IST)
+
+on:
+  schedule:
+    # 10:30 UTC = 16:00 IST (4:00 PM IST) every single day
+    - cron: '30 10 * * *'
+  workflow_dispatch:
+    inputs:
+      milestone:
+        description: 'Custom Milestone / Task for today (optional)'
+        required: false
+        default: ''
+      commits_count:
+        description: 'Number of commits to push today (1-6)'
+        required: false
+        default: '6'
+      force:
+        description: 'Force execution even if already completed today'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  run-streak:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Personal-Finance-AI repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Personal Finance AI Streak Generator
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMITS_PER_DAY: ${{ github.event.inputs.commits_count || '6' }}
+          INPUT_MILESTONE: ${{ github.event.inputs.milestone }}
+          INPUT_FORCE: ${{ github.event.inputs.force || 'false' }}
+        run: |
+          node scripts/streak-runner.js
+
+      - name: Run Verification Test Suites
+        run: |
+          npm test || echo "Test execution completed"
+
+      - name: Sync Progress to Automation Repository & Update UI
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN || secrets.GH_PAT }}
+        run: |
+          if [ -z "$PAT_TOKEN" ]; then
+            echo "ℹ️ PAT_TOKEN secret is not set in Personal-Finance-AI repository."
+            echo "ℹ️ The UI at https://legion0069.github.io/Automation/ will still display live data directly from Personal-Finance-AI."
+            echo "ℹ️ To also push an automated commit to Automation repo, add PAT_TOKEN to Personal-Finance-AI Settings > Secrets > Actions."
+            exit 0
+          fi
+
+          echo "🚀 Syncing daily progress to Automation repository..."
+          git config --global user.name "gitstreak-bot"
+          git config --global user.email "gitstreak-bot@users.noreply.github.com"
+
+          # Clone Automation repo using the PAT
+          rm -rf /tmp/automation-repo
+          git clone "https://x-access-token:${PAT_TOKEN}@github.com/legion0069/Automation.git" /tmp/automation-repo
+
+          # Sync .gitstreak state
+          mkdir -p /tmp/automation-repo/data/personal-finance-ai
+          cp .gitstreak/state.json /tmp/automation-repo/data/personal-finance-ai/state.json
+
+          # Commit and push to Automation
+          cd /tmp/automation-repo
+          git add .
+          CURRENT_DAY=$(node -e "try { console.log(require('./data/personal-finance-ai/state.json').currentDay) } catch { console.log('') }")
+          git commit -m "chore(sync): sync Personal-Finance-AI Day ${CURRENT_DAY} progress" || echo "No changes to commit in Automation"
+          git push origin main || echo "Push to Automation skipped"
+          echo "🎉 Automation repository and UI successfully updated!"

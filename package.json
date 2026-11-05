@@ -1,0 +1,22 @@
+{
+  "name": "personal-finance-ai",
+  "version": "1.0.0",
+  "description": "Autonomous AI-powered Personal Finance Platform: bank statement parsing, spending analysis, dynamic budgeting, cash flow forecasting, investment suggestions, and natural language expense chat.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node -e \"const fs=require('fs'),path=require('path');fs.readdirSync('tests').filter(f=>f.endsWith('.test.js')).forEach(f=>require(path.join(process.cwd(),'tests',f)));\"",
+    "streak": "node scripts/streak-runner.js",
+    "start": "node src/index.js"
+  },
+  "keywords": [
+    "personal-finance",
+    "ai",
+    "bank-statement-parser",
+    "budgeting",
+    "forecasting",
+    "investments",
+    "expense-chat"
+  ],
+  "author": "legion0069",
+  "license": "MIT"
+}
